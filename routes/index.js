@@ -8,8 +8,9 @@ router.get('/', function(req, res) {
   	 console.log(sig);
 	//The url we want is: '127.0.0.1:9233/WelchAllyn/Device/GetDevices'
 	var options = {
-	  host: '127.0.0.1:9233',
-	  path: sig,
+	  host: '127.0.0.1',
+	  port:  9233,
+	  path:  sig
 	};
 	var callback = function(response) {
 	  var str = '';
