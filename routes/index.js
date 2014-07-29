@@ -23,8 +23,10 @@ router.get('/', function(req, res) {
 	    res.send(str);	
 	  });
 	}
-	http.request(options, callback).end();
-
+	http.server =http.get(options, callback);
+	server.on("error", function(e){
+									  console.log("Got error: " + e.message);
+									});	
 	  //res.render('index', { title: 'Express' });
 	});
 
