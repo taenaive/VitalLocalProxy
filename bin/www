@@ -1,9 +1,37 @@
 #!/usr/bin/env node
 var debug = require('debug')('VitalLocalProxy');
 var app = require('../app');
+var https = require('https'),
+	http = require('http'),
+	fs =    require('fs'),        // required to read certs and keys
+    path = require('path');
 
-app.set('port', process.env.PORT || 3006);
+// app.set('port', process.env.PORT || 3006);
 
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
-});
+// var server = app.listen(app.get('port'), function() {
+//   debug('Express server listening on port ' + server.address().port);
+// });
+
+
+// your express configuration here
+
+var httpServer = http.createServer(app);
+
+//var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+//var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+//var credentials = {key: privateKey, cert: certificate};
+var options = {
+     cert : fs.readFileSync(path.join(__dirname, '../fakecerts/ca2/', 'server2.crt')),
+     key  : fs.readFileSync(path.join(__dirname, '../fakecerts', 'server.key')),
+     ca   : fs.readFileSync(path.join(__dirname, '../fakecerts/ca2/', 'ca2.crt')),
+    requestCert:        false,
+    rejectUnauthorized: false,
+    passphrase: 'tae123456'
+};
+// CAC Authentication server
+https.createServer(options,app).listen(3006);   //app.get('port')
+
+//var httpsServer = https.createServer(credentials, app);
+
+//httpServer.listen(3006);
+//httpsServer.listen(443);
